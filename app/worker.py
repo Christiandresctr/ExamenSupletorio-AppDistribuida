@@ -8,6 +8,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from mensajeria import mensajeria
 from cache import cache
+from database import db
 
 def procesar_pedido(ch, method, properties, body):
     """
@@ -27,6 +28,8 @@ def procesar_pedido(ch, method, properties, body):
 
     pedido['estado'] = 'completado'
     cache.set(f"pedido:{pedido['id']}", pedido, expira_en=300)
+
+    db.actualizar_estado_pedido(pedido['id'], 'completado')
     
     print(f" [✓] Pedido {pedido.get('id')} completado!")
     
