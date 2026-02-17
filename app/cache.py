@@ -29,11 +29,11 @@ class Cache:
 
         def delete(self, clave):
             """Elimina un valor del cache"""
-            self.client.delete(clave)
+            return self.client.delete(clave)
         
         def existe(self, clave):
             """Verifica si una clave existe en el cache"""
-            return self.client.exists(clave)
+            return bool(self.client.exists(clave))
         
 # Instancia Global
 cache = Cache()
