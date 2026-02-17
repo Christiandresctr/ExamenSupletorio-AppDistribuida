@@ -1,0 +1,18 @@
+# === Python ===
+__pycache__/
+*.pyc
+venv/
+.env
+
+# === Docker y Bases de Datos (CRÍTICO) ===
+postgres-data/
+*.log
+
+# === Herramientas (IDE) ===
+.vscode/
+.idea/
+
+# === Terraform (Si decides usarlo después) ===
+.terraform/
+*.tfstate
+*.tfstate.backup

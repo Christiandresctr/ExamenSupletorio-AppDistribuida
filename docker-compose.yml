@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  #Servicio de la aplicación
+  app:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - REDIS_HOST=redis
+      - RABBITMQ_HOST=rabbitmq
+      - DB_HOST=postgres
+    depends_on:
+      - redis
+      - rabbitmq
+      - postgres
+    networks:
+      - app-network
+
+  # Redis para cache
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+
+  # RabbitMQ para mensajería
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - "5672:5672" #Puerto AMQP
+      - "15672:15672" #Management UI
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin123
+    networks:
+      - app-network
+
+  # PostgreSQL para base de datos
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=miapp
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+    
